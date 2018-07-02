@@ -21,4 +21,5 @@
   <engine name="ios" spec="4.2.0" />
   <engine name="windows" spec="4.4.2" />
   <preference name="windows-target-version" value="10.0" />
+  <plugin name="cordova-plugin-geolocation" spec="~2.4.3" />
 </widget>
