@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+   
+<script type="text/javascript" language="javascript">
+    function getAllTags() {
+        var arr = new Array();
+        arr = document.getElementsByTagName("*");
+
+        alert("Total Number of HTML Elements Found: " 
+             + document.getElementsByTagName("*").length);
+
+        for (var i = 0; i < arr.length; i++) {
+            var tagName = 
+                        document.getElementsByTagName("*").item(i).nodeName;
+            var tagObj = 
+                        document.getElementsByTagName("*").item(i);
+
+            alert("TagName: "
+                 + tagName
+                 + "\n\ninnerText:\n" 
+                 + tagObj.innerHTML);
+        }
+    }
+</script>
+
+    <name id="ppp">
+        <address>address1</address>
+        <phone>02-27997496</phone>
+    </name>
+    <br />
+    <input type='button' onclick="getAllTags();" value="取得內容" />
+</body>
+</html>

@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script>
+        function loadXMLDoc(url) {
+            var xmlhttp;
+            var txt, xx, x, i;
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            }
+            else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    txt = "<table border='1'><tr><th>Title</th><th>Artist</th></tr>";
+                    x = xmlhttp.responseXML.documentElement.getElementsByTagName("CD");
+                    alert(xmlhttp.responseXML);
+                    for (i = 0; i < x.length; i++) {
+                        txt = txt + "<tr>";
+                        xx = x[i].getElementsByTagName("TITLE");
+                        {
+                            try {
+                                txt = txt + "<td>" + xx[0].firstChild.nodeValue + "</td>";
+                            }
+                            catch (er) {
+                                txt = txt + "<td>&nbsp;</td>";
+                            }
+                        }
+                        xx = x[i].getElementsByTagName("ARTIST");
+                        {
+                            try {
+                                txt = txt + "<td>" + xx[0].firstChild.nodeValue + "</td>";
+                            }
+                            catch (er) {
+                                txt = txt + "<td>&nbsp;</td>";
+                            }
+                        }
+                        txt = txt + "</tr>";
+                    }
+                    txt = txt + "</table>";
+                    document.getElementById('txtCDInfo').innerHTML = txt;
+                }
+            }
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+        }
+        function get_cd() {
+            var filename = "";
+            if (document.getElementById('Radio1').checked) {
+                filename = "cd_catalog.xml";
+            }
+            else {
+                filename = "cd_catalog.gpx";
+            }
+            alert(filename);
+            loadXMLDoc(filename);
+        }
+    </script>
+</head>
+<body>
+    選擇：<input id="Radio1" name="select1" type="radio" value="xml" checked />xml <input name="select1"  id="Radio2" type="radio" value="gpx"/>gpx
+    <br />
+    <input id="Button1" type="button" value="button" onclick="get_cd();" />
+
+    <div id="txtCDInfo">Info here</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+     <script type="text/javascript">
+         function test() {
+             xmlDoc = loadXMLDoc("D:\cms\bike\Web2010\try\0114-3.xml") // Path to the XML file;
+             var M = xmlDoc.getElementsByTagName("article");
+             var v="";
+             for (i = 0; i < M.length; i++) {
+                 v += "<div style='width:450px;'>";
+                 v += "<h2>" + xmlDoc.getElementsByTagName("title")[i].childNodes[0].nodeValue + "</h2>";
+                 v += "<p>" + xmlDoc.getElementsByTagName("description")[i].childNodes[0].nodeValue + "</p>";
+                 v += "<p><a href='" + xmlDoc.getElementsByTagName("url")[i].childNodes[0].nodeValue + "' target='_blank'>" + xmlDoc.getElementsByTagName("urltext")[i].childNodes[0].nodeValue + "</a></p>";
+                 v += "</div>";
+                
+             }
+             alert(v);
+         }
+ </script>
+</head>
+<body>
+   Hello
+    <input id="Button1" type="button" value="button" onclick="test();" />
+</body>
+</html>
