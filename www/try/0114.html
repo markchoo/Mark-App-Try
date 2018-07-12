@@ -649,14 +649,16 @@
         function animatex() {
             animateCircle();
         }
-        var myTrack, myTrackCount;
-        
+        var myTrack, myTrackCount, myTrackCount2;
+        var callbacked;
         var old_x,old_y;
    
         function TrackPosition() {
             document.getElementById("TrackMessage").innerHTML = '開始持續追蹤位置';
             myTrackCount = 0;
+            myTrackCount2 = 0;
             var x = document.getElementById("TrackSeconds");
+            callbacked = 1;
             myTrack = setInterval(requestPosition0, (x.value) * 1000);
         }
         function requestPositionx() {
@@ -665,34 +667,37 @@
         }
         function requestPosition0() {
             myTrackCount = myTrackCount + 1;
-            requestPosition();
-            var y = document.getElementById("latitude").value;
-            var x = document.getElementById("longitude").value;
-            //alert(x);
-            if (myTrackCount >= 2) {
-                //alert('myTrackCount:'+myTrackCount);
-                var polylineArray = [];
-                var myLatLng = new google.maps.LatLng(old_y, old_x);
-                var myLatLng2 = new google.maps.LatLng(y, x);
-                //alert(11);
-                polylineArray.push(myLatLng);
-                polylineArray.push(myLatLng2);
-                var polylinePath = new google.maps.Polyline({
-                    path: polylineArray,
-                    strokeColor: "#FF0000",
-                    strokeWeight: 2,
-                    strokeOpacity: 0.9
-                });
-                //alert(12);
+            if (callbacked == 1) {
+                myTrackCount2 = myTrackCount2 + 1;
+                callbacked = 0;
+                requestPosition();
             }
-            old_x = x;
-            old_y = y;
-            //alert(13);
-            document.getElementById("TrackMessage").innerHTML = '持續追蹤位置次數：' + myTrackCount.toString();
-        }
+            if (callbacked == 1) {
+                var y = document.getElementById("latitude").value;
+                var x = document.getElementById("longitude").value;
+                //alert(x);
+                if (myTrackCount >= 2) {
+                    //alert('myTrackCount:'+myTrackCount);
+                    var polylineArray = [];
+                    var myLatLng = new google.maps.LatLng(old_y, old_x);
+                    var myLatLng2 = new google.maps.LatLng(y, x);
+                    polylineArray.push(myLatLng);
+                    polylineArray.push(myLatLng2);
+                    var polylinePath = new google.maps.Polyline({
+                        path: polylineArray,
+                        strokeColor: "#FF0000",
+                        strokeWeight: 2,
+                        strokeOpacity: 0.9
+                    });
+                }
+                old_x = x;
+                old_y = y;
+            }
+            document.getElementById("TrackMessage").innerHTML = '持續追蹤位置次數：' + myTrackCount.toString() + '，已記錄點數：' + myTrackCount2;
+       }
         function StopTrackPosition() {
             clearInterval(myTrack);
-            document.getElementById("TrackMessage").innerHTML = '停止持續追蹤位置';
+            document.getElementById("TrackMessage").innerHTML = '停止持續追蹤位置，已記錄點數：' + myTrackCount2;
         }
 
         var nav = null;
@@ -719,6 +724,7 @@
             setText(position.coords.longitude, "longitude");
 
             center_show("latitude", "longitude");
+            callbacked = 1;
         }
         function center_show(y, x) {
             var y1 = document.getElementById(y).value;
@@ -774,7 +780,7 @@
                     "an unknown error (Code: " + strErrorCode + ").";
             }
             alert(message);
-
+            callbacked = 1;
         }
         function setText(val, e) {
             document.getElementById(e).value = val;
@@ -807,7 +813,7 @@
     <link rel="stylesheet" href="/www/css/bootstrap.min.css">
 </head>
 <body onload="initialize()">
-    <a href="./">回主頁</a>
+    <a href="./try.html">回主頁</a>
     <br />
     <input id="Text1" type="text" value="123" />
     <input id="Button11" type="button" value="adjust1" onclick="adjust2();" />
