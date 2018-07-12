@@ -661,11 +661,28 @@
             callbacked = 1;
             myTrack = setInterval(requestPosition0, (x.value) * 1000);
         }
+        function DrawLine() {
+            var y = document.getElementById("latitude").value;
+            var x = document.getElementById("longitude").value;
+            var polylineArray = [];
+            var myLatLng2 = new google.maps.LatLng(y, x);
+            var myLatLng = new google.maps.LatLng(parseFloat(y)+0.001, parseFloat(x)+0.001);
+            polylineArray.push(myLatLng);
+            polylineArray.push(myLatLng2);
+            //alert(polylineArray);
+            var polylinePath = new google.maps.Polyline({
+                path: polylineArray,
+                strokeColor: "#FF0000",
+                strokeWeight: 2,
+                strokeOpacity: 0.9
+            });
+            polylinePath.setMap(map);
+        }
         function requestPositionx() {
             myTrackCount = 1;
             requestPosition();
         }
-        function requestPosition0() {
+       function requestPosition0() {
             myTrackCount = myTrackCount + 1;
             if (callbacked == 1) {
                 myTrackCount2 = myTrackCount2 + 1;
@@ -689,6 +706,7 @@
                         strokeWeight: 2,
                         strokeOpacity: 0.9
                     });
+                    polylinePath.setMap(map);
                 }
                 old_x = x;
                 old_y = y;
@@ -828,6 +846,8 @@
     <input id="btnLocate" class="content-container" type="button" value="持續呼叫位置" onclick="TrackPosition();" />
     <input id="btnLocate2" class="content-container" type="button" value="停止呼叫" onclick="StopTrackPosition();" />
     <p id="TrackMessage" style="color:red;"></p>
+    <p />
+    <input id="Button15a" class="content-container" type="button" value="畫直線" onclick="DrawLine();" />
     <p />
     <input id="Button16" type="button" value="移動位置" onclick="SetPosition();" />
     <input id="Button1" type="button" value="讀xml" onclick="read_xml();" />
