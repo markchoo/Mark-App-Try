@@ -669,20 +669,20 @@
             myTrackCount = myTrackCount + 1;
             if (callbacked == 1) {
                 myTrackCount2 = myTrackCount2 + 1;
-                callbacked = 0;
                 requestPosition();
             }
             if (callbacked == 1) {
                 var y = document.getElementById("latitude").value;
                 var x = document.getElementById("longitude").value;
                 //alert(x);
-                if (myTrackCount >= 2) {
+                if (myTrackCount >= 2 && old_y != 0) {
                     //alert('myTrackCount:'+myTrackCount);
                     var polylineArray = [];
                     var myLatLng = new google.maps.LatLng(old_y, old_x);
                     var myLatLng2 = new google.maps.LatLng(y, x);
                     polylineArray.push(myLatLng);
                     polylineArray.push(myLatLng2);
+                    //alert(polylineArray);
                     var polylinePath = new google.maps.Polyline({
                         path: polylineArray,
                         strokeColor: "#FF0000",
@@ -693,6 +693,8 @@
                 old_x = x;
                 old_y = y;
             }
+            callbacked = 0;
+
             document.getElementById("TrackMessage").innerHTML = '持續追蹤位置次數：' + myTrackCount.toString() + '，已記錄點數：' + myTrackCount2;
        }
         function StopTrackPosition() {
