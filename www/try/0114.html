@@ -3,7 +3,7 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <title>0114.htm ---  Google Maps JavaScript API v3 Example: Common Loader</title>
-    <script type="text/javascript" src="../scripts/jquery-3.3.1.min.js">
+    <script type="text/javascript" src="/www/scripts/jquery-3.3.1.min.js">
     </script>
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
     <script type="text/javascript" src="util.js"></script>
@@ -649,6 +649,52 @@
         function animatex() {
             animateCircle();
         }
+        var myTrack, myTrackCount;
+        
+        var old_x,old_y;
+   
+        function TrackPosition() {
+            document.getElementById("TrackMessage").innerHTML = '開始持續追蹤位置';
+            myTrackCount = 0;
+            var x = document.getElementById("TrackSeconds");
+            myTrack = setInterval(requestPosition0, (x.value) * 1000);
+        }
+        function requestPositionx() {
+            myTrackCount = 1;
+            requestPosition();
+        }
+        function requestPosition0() {
+            myTrackCount = myTrackCount + 1;
+            requestPosition();
+            var y = document.getElementById("latitude").value;
+            var x = document.getElementById("longitude").value;
+            //alert(x);
+            if (myTrackCount >= 2) {
+                alert('myTrackCount:'+myTrackCount);
+                var polylineArray = [];
+                var myLatLng = new google.maps.LatLng(old_y, old_x);
+                var myLatLng2 = new google.maps.LatLng(y, x);
+                //alert(11);
+                polylineArray.push(myLatLng);
+                polylineArray.push(myLatLng2);
+                var polylinePath = new google.maps.Polyline({
+                    path: polylineArray,
+                    strokeColor: "#FF0000",
+                    strokeWeight: 2,
+                    strokeOpacity: 0.9
+                });
+                //alert(12);
+            }
+            old_x = x;
+            old_y = y;
+            //alert(13);
+            document.getElementById("TrackMessage").innerHTML = '持續追蹤位置次數：' + myTrackCount.toString();
+        }
+        function StopTrackPosition() {
+            clearInterval(myTrack);
+            document.getElementById("TrackMessage").innerHTML = '停止持續追蹤位置';
+        }
+
         var nav = null;
 
         function requestPosition() {
@@ -688,13 +734,16 @@
                 anchor: new google.maps.Point(6, 18)
 
             };
-            var photoMarker = new google.maps.Marker({
-                position: myLatLng,
-                shadow: shadow,
-                //zIndex: 3,
-                map: map,
-                icon: image
-            });
+            if (myTrackCount == 1) {
+                var photoMarker = new google.maps.Marker({
+                    position: myLatLng,
+                    shadow: shadow,
+                    //zIndex: 3,
+                    map: map,
+                    icon: image
+                });
+            }
+
             map.setCenter(myLatLng);
 
         }
@@ -755,18 +804,25 @@
             max-width: 100%;
         }
     </style>
+    <link rel="stylesheet" href="/www/css/bootstrap.min.css">
 </head>
 <body onload="initialize()">
     <a href="./">回主頁</a>
     <br />
     <input id="Text1" type="text" value="123" />
-     <input id="Button11" type="button" value="adjust1" onclick="adjust2();" />
+    <input id="Button11" type="button" value="adjust1" onclick="adjust2();" />
     <br />
     <label for="latitude">Latitude: </label><input id="latitude" /> &nbsp;
     <label for="longitude">Longitude: </label><input id="longitude" />  &nbsp;
-     <input id="Button15" type="button" value="現在位置" onclick="requestPosition();" />
-     <input id="Button16" type="button" value="移動位置" onclick="SetPosition();" />
-     <input id="Button1" type="button" value="讀xml" onclick="read_xml();" />
+    <input id="Button15" class="content-container" type="button" value="現在位置" onclick="requestPositionx();" />
+    <p />
+    呼叫間隔秒數：<input id="TrackSeconds" type="text" value="5" />
+    <input id="btnLocate" class="content-container" type="button" value="持續呼叫位置" onclick="TrackPosition();" />
+    <input id="btnLocate2" class="content-container" type="button" value="停止呼叫" onclick="StopTrackPosition();" />
+    <p id="TrackMessage" style="color:red;"></p>
+    <p />
+    <input id="Button16" type="button" value="移動位置" onclick="SetPosition();" />
+    <input id="Button1" type="button" value="讀xml" onclick="read_xml();" />
     <input id="Button3" type="button" value="讀gpx" onclick="read_xml3();" />
     <input id="Button12" type="button" value="讀gpx-2" onclick="read_xml3a();" />
     <input id="Button13" type="button" value="讀gpx-3" onclick="read_xml3b();" />
